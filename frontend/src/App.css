@@ -1,0 +1,85 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* --- Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --brand:#6d28d9;          /* purple */
+  --brand-2:#8b5cf6;
+  --ring: rgba(109,40,217,.25);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+}
+a{color:inherit;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+
+/* --- Navbar  --- */
+.navbar{
+  position: sticky; top: 0; z-index: 50;
+  background:#fff; border-bottom:1px solid #e5e7eb;
+}
+.navbar .inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding:12px 24px;
+  display:flex; align-items:center; gap:20px;
+}
+.brand{font-weight:700}
+.navlinks{margin-left:auto; display:flex; gap:14px}
+.navlinks a{padding:6px 10px; border-radius:8px}
+.navlinks a:hover{background:#f1f5f9}
+
+/* Page container used in <main> */
+.container{max-width:1100px;margin:0 auto;padding:24px}
