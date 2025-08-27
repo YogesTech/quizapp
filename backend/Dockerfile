@@ -1,20 +1,24 @@
-# Use JDK 17
-FROM eclipse-temurin:17-jdk
-
-# Work inside /app
+# -------- Stage 1: build with Maven (JDK 17) --------
+FROM maven:3.9.8-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy backend code into the image
-COPY . .
+# Copy only pom first to warm the cache
+COPY pom.xml .
+RUN mvn -q -DskipTests dependency:go-offline
 
-# If you DON'T have Maven Wrapper committed, install Maven in the image:
-RUN apt-get update && apt-get install -y maven
-
-# Build the jar (skip tests for speed)
+# Now copy sources and build
+COPY src ./src
 RUN mvn -q -DskipTests package
 
-# Render injects PORT; we already have server.port=${PORT:8080} in properties
+# -------- Stage 2: run on JRE 17 (smaller image) --------
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+
+# Copy the fat jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Render sets $PORT; Spring uses it (server.port=${PORT:8080})
+ENV PORT=8080
 EXPOSE 8080
 
-# Run the app
-CMD ["sh", "-c", "java -jar target/*.jar"]
+CMD ["sh", "-c", "java -jar app.jar"]
