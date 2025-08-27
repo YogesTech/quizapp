@@ -25,7 +25,6 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    // === Dependencies injected by Spring ===
     private final UserRepository repo; // access users table
     private final PasswordEncoder encoder; // hash passwords
     private final AuthenticationManager auth; // authenticate credentials

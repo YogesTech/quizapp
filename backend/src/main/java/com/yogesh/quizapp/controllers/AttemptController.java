@@ -1,5 +1,6 @@
 package com.yogesh.quizapp.controllers;
 
+import com.yogesh.quizapp.dto.AttemptSummaryDTO;
 import com.yogesh.quizapp.models.QuizAttempt;
 import com.yogesh.quizapp.models.User;
 import com.yogesh.quizapp.repositories.UserRepository;
@@ -54,8 +55,8 @@ public class AttemptController {
     }
 
     @GetMapping("/my")
-    public List<QuizAttempt> myAttempts(@AuthenticationPrincipal UserDetails userDetails) {
+    public List<AttemptSummaryDTO> myAttempts(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepo.findByEmail(userDetails.getUsername()).orElseThrow();
-        return attemptService.userAttempts(user.getId());
+        return attemptService.userAttemptSummaries(user.getId());
     }
 }

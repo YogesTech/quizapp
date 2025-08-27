@@ -1,5 +1,6 @@
 package com.yogesh.quizapp.services;
 
+import com.yogesh.quizapp.dto.AttemptSummaryDTO;
 import com.yogesh.quizapp.models.*;
 import com.yogesh.quizapp.repositories.*;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,9 @@ public class AttemptService {
 
     public List<QuizAttempt> userAttempts(Long userId) {
         return attemptRepo.findByUserId(userId);
+    }
+
+    public List<AttemptSummaryDTO> userAttemptSummaries(Long userId) {
+        return attemptRepo.findSummariesByUserId(userId);
     }
 }

@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // <<< allow preflight
                         .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/quizzes/**").permitAll() // public browse
-                        // .requestMatchers(HttpMethod.POST, "/quizzes/**").hasRole("ADMIN") // optional
+                        // .requestMatchers(HttpMethod.POST, "/quizzes/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
