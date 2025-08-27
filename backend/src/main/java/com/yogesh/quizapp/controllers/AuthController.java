@@ -9,6 +9,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,10 +67,11 @@ public class AuthController {
      * - Sends a welcome email (Mailtrap inbox will receive it)
      */
     @PostMapping("/register")
-    public void register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<Void> register(@RequestBody RegisterRequest req) {
         // 1) Prevent duplicate email
         if (repo.findByEmail(req.email()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            // 409 Conflict instead of 500
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         // 2) Persist user with encoded password
@@ -78,11 +82,18 @@ public class AuthController {
                 .role(req.role())
                 .build());
 
-        // 3) Send welcome email
-        emailService.send(
-                req.email(),
-                "Welcome to QuizApp",
-                "Hi " + req.name() + ", your account is ready. Enjoy taking quizzes!");
+        // 3) Send welcome email (don't fail registration if mail fails)
+        try {
+            emailService.send(
+                    req.email(),
+                    "Welcome to QuizApp",
+                    "Hi " + req.name() + ", your account is ready. Enjoy taking quizzes!");
+        } catch (Exception e) {
+            System.out.println("Email send skipped/failed: " + e.getMessage());
+        }
+
+        // 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**

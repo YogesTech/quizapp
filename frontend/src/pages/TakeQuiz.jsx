@@ -32,7 +32,7 @@ export default function TakeQuiz() {
       const { data } = await api.post(`/attempts/${id}/submit`, payload);
       setMsg(`Submitted ✅ Score: ${data.score ?? "(see backend response)"}`);
     } catch {
-      setMsg("Submit failed ❌ please login first");
+      setMsg("⚠️ Access Denied! You must log in to continue 🚫");
     }
   };
 
