@@ -9,7 +9,7 @@ RUN mvn -q -DskipTests dependency:go-offline
 COPY src ./src
 RUN mvn -q -DskipTests package
 
-# -------- Stage 2: run on JRE 17 --------
+# -------- Stage 2: run on JRE 17 (smaller image) --------
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
