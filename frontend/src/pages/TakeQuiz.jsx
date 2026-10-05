@@ -8,20 +8,38 @@ export default function TakeQuiz() {
   const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState({}); // {questionId: "A"}
   const [msg, setMsg] = useState("");
+  const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
         const { data } = await api.get(`/quizzes/${id}`);
         setQuiz(data);
+        setTimeLeft(data.timeLimitSeconds);
       } catch {
         setMsg("Failed to load quiz");
       }
     })();
   }, [id]);
 
+  useEffect(() => {
+    if (timeLeft === null || timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      submit();
+    }
+  }, [timeLeft]);
+
   const submit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
       const payload = {
         answers: Object.entries(answers).map(([questionId, chosenOption]) => ({
@@ -41,6 +59,10 @@ export default function TakeQuiz() {
 
   return (
     <form onSubmit={submit} className="quiz-wrap">
+      <div className="timer">
+        Time Left: {Math.floor(timeLeft / 60)}:
+        {String(timeLeft % 60).padStart(2, "0")}
+      </div>
       <div className="quiz-title">{quiz.title}</div>
 
       {quiz.questions?.map((q) => (
